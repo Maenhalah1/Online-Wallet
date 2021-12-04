@@ -10,15 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentMethodsRepository
 {
-//
-//    public function getAllCurrenciesIds(): array
-//    {
-//        $currencies = Currency::all();
-//        $currenciesIds = [];
-//        foreach ($currencies as $currency)
-//            $currenciesIds[$currency->id] = true;
-//        return $currenciesIds;
-//    }
 
     public function rules(): array
     {
@@ -62,6 +53,10 @@ class PaymentMethodsRepository
             $result["inputs"] = $request->all();
         }
         return $result;
+    }
+
+    public function getAll(){
+        return PaymentMethod::all();
     }
 
     public function editPage(Request $request, $id): array

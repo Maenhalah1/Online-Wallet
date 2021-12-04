@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
              $wallet->total_amount = 0;
              $user->wallet()->save($wallet);
          })->create();
-        //$this->call(AdminSeeder::class);
+        $this->call(AdminSeeder::class);
     }
 }

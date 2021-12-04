@@ -11,7 +11,6 @@ class RoutesRunnable
     public static function run(){
         RouteMapping::map(new Api());
         RouteMapping::map(new Web());
-        RouteMapping::map(new Auth());
 
     }
 

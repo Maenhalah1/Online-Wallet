@@ -75,4 +75,5 @@
     <script type="text/javascript">$('#sampleTable').DataTable();</script>
     <script type="module" src="{{asset("assets/js/pages/admin/user.js")}}"></script>
 
+
 @endsection

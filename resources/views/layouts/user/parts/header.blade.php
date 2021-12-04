@@ -28,7 +28,10 @@
 
  <link rel="stylesheet" type="text/css" href="{{asset('assets/css/' . app()->getLocale() . '/custom.css')}}">
 
+ <!-- Scripts -->
+ <script type="module" src="{{asset("assets/js/pages/user/main.js")}}"></script>
+
 <!-- Font-icon css-->
-@hasSection("css-links")
-    @yield("css-links")
+@hasSection("header-resources")
+    @yield("header-resources")
 @endif

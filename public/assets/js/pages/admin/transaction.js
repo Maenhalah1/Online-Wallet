@@ -13,7 +13,7 @@ async function changeTransactionStatus(status, transactionId, targetButton) {
     return false;
 }
 
-$('.accept-transaction').on('click', function () {
+$(document).on('click', '.accept-transaction',function () {
     swal({
         title: 'Accept Transaction',
         text: 'Are You Sure To Accept This Transaction ?',
@@ -27,9 +27,9 @@ $('.accept-transaction').on('click', function () {
             });
         }
     })
-
 });
-$('.reject-transaction').on('click', async function () {
+
+$(document).on('click', '.reject-transaction',async function () {
     swal({
         title: 'Reject Transaction',
         text: 'Are You Sure To Reject This Transaction ?',

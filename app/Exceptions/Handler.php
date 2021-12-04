@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\ApiResponse\Json\JsonResponse;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -37,5 +39,12 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        return $request->expectsJson() || $request->is("api/*")
+            ? JsonResponse::error()->message("unauthenticated")->changeCode(200)->changeStatusNumber("S401")->send()
+            : redirect()->guest($request->is("admin*") ?  route('admin.login') : route("login"));
     }
 }

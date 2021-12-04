@@ -6,87 +6,90 @@ use App\Helpers\ApiResponse\Json\JsonResponse;
 use App\Models\Client;
 use App\Models\Technician;
 use App\Models\User;
+use App\Rules\PasswordPattern;
 use Carbon\Carbon;
 use Firebase\Auth\Token\Exception\InvalidToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class AuthRepository
 {
     public function createToken(User $user): string
     {
-        $token = $user->createToken(env("TOKEN_KEY"));
+        $token = $user->createToken(env("TOKEN_KEY") ?? "TOKEN_SECRET");
         $tokenObj = $token->token;
         $tokenObj->expires_at = Carbon::now()->addWeeks(4);
         $tokenObj->save();
         return $token->accessToken;
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function loginClient(Request $request): array
-    {
-        $auth = Firebase::auth();
-        $firebaseToken = $request->firebase_token;
 
-        try { // Try to verify the Firebase credential token with Google
-            $verifiedIdToken = $auth->verifyIdToken($firebaseToken);
-            $uid = $verifiedIdToken->claims()->get('sub');
-            $client = Client::where('firebase_uid', $uid)->first();
-            if($client){
-                $user = $client->user;
-                $data["token"] = $this->createToken($user);
-                $data["user"] = [
-                    "full_name" => $user->full_name,
-                    "user_type" => $user->type,
-                    "email" => $user->email,
-                    "phone_number" => $user->phone_number,
-                    "photo_profile" => $user->getFirstMediaFile("profile_photo") ? $user->getFirstMediaFile("profile_photo")->url : null,
-                ];
-                return $data;
-            }else{
-                throw new \Exception("user not found", 400);
+    public function checkUserLoginIsValid(?User $user, Request $request): array
+    {
+        $result["valid"] = true;
+        if($user){
+            if(!$user->matchingPassword($request->password)){
+                $result["valid"] = false;
+                $result["message"] = "The Login Data Are Not Matching ...";
+            }else if(!$user->activation){
+                $result["valid"] = false;
+                $result["message"] = "Your Account Has Been Blocked By Admin";
             }
-
-        } catch (\InvalidArgumentException $e) {
-            throw new \Exception($e->getMessage(), 500);
-        } catch (InvalidToken $e) { // If the token is invalid (expired ...)
-            throw new \Exception('token not valid', 401);
-        }
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function loginTechnician(Request $request): array
-    {
-        $field = filter_var($request->login_field, FILTER_VALIDATE_EMAIL) ? "email" : "username";
-
-        if($field == "email"){
-            $user = User::where(["email" => $request->login_field, "type" => "t"])->first();
-            if($user)
-                $technician = $user->technician;
-            else
-                throw new \Exception ("user not found", 500);
-
         }else{
-            $technician = Technician::where("username", $request->login_field)->first();
-            if(!$technician)
-                throw new \Exception("user not found", 404);
+            $result["valid"] = false;
+            $result["message"] = "The Login Data Are Not Matching ...";
         }
-        if(Hash::check($request->password, $technician->password)){
-            $user = $technician->user;
-            $data["token"] = $this->createToken($user);
-            $data["user"] = [
-                "full_name" => $user->full_name,
-                "user_type" => $user->type,
-                "email" => $user->email,
-                "photo_profile" => $user->getFirstMediaFile("profile_photo") ? $user->getFirstMediaFile("profile_photo")->url : null,
-            ];
-            return $data;
-        }
-        throw new \Exception("password incorrect", 400);
+        return $result;
     }
+
+    public function loginUser(User $user): array
+    {
+        $data["token"] = $this->createToken($user);
+        $data["user"] = [
+            "name" => $user->name,
+            "username" => $user->username,
+            "email" => $user->email,
+            "photo_profile" => $user->getFirstMedia("profile_photo") ? $user->getFirstMedia("profile_photo")->url : null,
+        ];
+        return $data;
+    }
+
+    public function registerRules(): array
+    {
+        return [
+            "name"              => ["required", "max:255"],
+            "username"          => ["required", "unique:users", "max:255"],
+            "email"             => ["required",  "email", "unique:users"],
+            "password"          => ["required", "max:255", new PasswordPattern()],
+            "confirm_password"  => ["required", "max:255", "same:password"],
+        ];
+    }
+
+    public function registerValidation(Request $request): array
+    {
+        $result["fails"] = false;
+        $valid = Validator::make($request->all(), $this->registerRules());
+        if($valid->fails()){
+            $result["fails"] = true;
+            $result["messages"] = $valid->errors()->messages();
+        }
+        return $result;
+    }
+
+
+    public function register(Request $request): array
+    {
+        $walletRepo = new WalletRepository();
+        $user = new User();
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->save();
+        $walletRepo->createWallet($user->id);
+        return $this->loginUser($user);
+    }
+
 }

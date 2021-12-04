@@ -1,6 +1,6 @@
 <header class="app-header" style="background: #222d32">
     <a class="app-header__logo" href="{{ route("admin.dashboard.index") }}">
-        <img src="{{asset("assets/logo2.svg")}}" alt="" class="site-logo"></a>
+        <h1 class="site-logo">Wallet</h1></a>
     <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"><i class="fas fa-bars"></i></a>
     <!-- Navbar Right Menu-->
     <ul class="app-nav">

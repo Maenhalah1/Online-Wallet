@@ -1,13 +1,10 @@
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
     <a class="app-sidebar__logo" href="{{ route("admin.dashboard.index") }}">
-        <img src="{{asset("assets/logo2.svg")}}" alt="" class="site-logo full">
-        <img src="{{asset("assets/logo1.svg")}}" alt="" class="site-logo small">
+        <h1 class="site-logo text-center full">Wallet</h1>
+        <h1 class="site-logo small">W</h1>
     </a>
     <div class="app-sidebar__user">
-        <div class="avatar-box">
-            <img class="app-sidebar__user-avatar" src="{{auth()->user()->profile_photo}}" alt="">
-        </div>
         <div>
             <p class="app-sidebar__user-name">{{auth()->user()->name}}</p>
             <p class="app-sidebar__user-name" style="font-size: 14px; color: #f2f2f2">{{__("Admin")}}</p>

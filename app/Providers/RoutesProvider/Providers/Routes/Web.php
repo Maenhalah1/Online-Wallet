@@ -16,6 +16,7 @@ class Web implements IRoutesProvider
 
             // Admin groups
             Route::name("admin.")->prefix("admin")->namespace("Admin")->group(function (){
+                Route::group(["namespace" => "Auth"],base_path('routes/web/admin/auth.php'));
                 Route::middleware("auth:admin")->group(function(){
                     Route::group([],base_path('routes/web/admin/main.php'));
                 });
@@ -24,6 +25,11 @@ class Web implements IRoutesProvider
             //Ajax groups
             Route::prefix("ajax")->namespace("Ajax")->name("ajax.")->group(function (){
                 Route::group([],base_path('routes/web/ajax/admin.php'));
+            });
+
+            //Website groups
+            Route::namespace("Website")->name("web.")->group(function (){
+                Route::group([],base_path('routes/web/website.php'));
             });
         });
 

@@ -31,7 +31,8 @@ trait Authentication
         return "/";
     }
 
-    public function redirectAfterLogout($guard){
+    public function redirectAfterLogout($guard): string
+    {
         $route = "/" ;
         switch ($guard){
             case "admin":

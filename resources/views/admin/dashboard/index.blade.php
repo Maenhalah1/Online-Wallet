@@ -50,9 +50,72 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <canvas id="transactionChart"></canvas>
+        </div>
+    </div>
 
 @endsection
 
 @section("scripts")
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const months = Object.values(JSON.parse('{!! $months !!}'))
+        const deposit = Object.values(JSON.parse('{!! $deposit !!}'))
+        const withdrawal = Object.values(JSON.parse('{!! $withdrawal !!}'))
+
+        const data = {
+            labels: months,
+            datasets: [{
+                label: 'Deposit',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: deposit,
+            },
+                {
+                    label: 'Withdrawal',
+                    backgroundColor: 'rgb(99,161,255)',
+                    borderColor: 'rgb(99,125,255)',
+                    data: withdrawal,
+                }]
+        };
+        const config = {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Transactions Chart'
+                    },
+                },
+                interaction: {
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        },
+                    }
+                }
+            },
+        };
+
+        const myChart = new Chart(
+            document.getElementById('transactionChart'),
+            config
+        );
+    </script>
 
 @endsection

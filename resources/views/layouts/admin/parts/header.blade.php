@@ -28,7 +28,6 @@
 <!-- Main CSS-->
 <link rel="stylesheet" type="text/css" href="{{asset("assets/css/main.css")}}">
 
-
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/lib/all.min.css')}}">
 
  <link rel="stylesheet" type="text/css" href="{{asset("assets/css/master.css")}}">
@@ -41,6 +40,7 @@
  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap" rel="stylesheet" type="text/css">
 
  <!-- Font-icon css-->
-@hasSection("header-resources")
+
+ @hasSection("header-resources")
     @yield("header-resources")
 @endif

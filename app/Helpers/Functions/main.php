@@ -14,11 +14,25 @@ function isJson($string){
        return false;
     return true;
 }
+
 function isArabic($string){
     if(mb_detect_encoding($string[0]) == "UTF-8")
         return true;
     return false;
 
+}
+
+function getArrayOfMonths($start = 1, $to = 'now'): array
+{
+    if($to == 'now')
+        $to = date('n');
+
+    $months = [];
+    while ($start <= $to){
+        $months[] = date("F", mktime(0,0,0,$start ,10));
+        $start++;
+    }
+    return $months;
 }
 
 function hasPermissions($permissions){
@@ -47,29 +61,6 @@ function hasPermissions($permissions){
     return false;
 }
 
-function getUserTypeName($type){
-    switch ($type){
-        case "wk": return __("Worker"); break;
-        case "cr": return __("Contractor"); break;
-        case "cc": return __("Contractor Company"); break;
-        case "eo": return __("Engineering Office"); break;
-        case "om": return __("Owner Mechanisms"); break;
-        case "ml": return __("Material Laboratory"); break;
-        case "sp": return __("Supplier"); break;
-        case "cl": return __("Client"); break;
-    }
-}
 
-function getSameWithNewLanguage($lang){
-    $path = request()->path();
-    for ($char = 0; strlen($path); $char++){
-        if($path[$char] !== "/")
-            $path[$char] = ' ';
-        else
-            break;
-    }
-    $path = trim($path, " /");
-    return "/" . $lang . "/" . $path;
-}
 
 

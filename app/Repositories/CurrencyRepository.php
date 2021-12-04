@@ -25,7 +25,8 @@ class CurrencyRepository
         ];
     }
 
-    public function updateRules(Request $request, Currency $currency){
+    public function updateRules(Request $request, Currency $currency): array
+    {
         $rules = $this->rules();
         if($request->name === $currency->name)
             unset($rules["name"]);
@@ -44,4 +45,5 @@ class CurrencyRepository
         $currency->difference_in_dollar = $request->difference_in_dollar;
         $currency->save();
     }
+
 }

@@ -26,7 +26,6 @@ a.box-links:hover{
 
 
 .site-logo{
-    width: 100px;
     max-height: 60px;
     padding-bottom: 6px
 }
@@ -466,7 +465,6 @@ a.box-links:hover{
     display: block;
 }
 .app-sidebar__logo .site-logo{
-    width: 120px;
     max-height: 80px;
 }
 

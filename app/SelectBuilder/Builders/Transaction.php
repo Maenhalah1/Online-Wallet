@@ -30,4 +30,9 @@ class Transaction extends SelectBuilder
         $this->query->where("type", $type);
         return $this;
     }
+
+    public function forUser($userId){
+        $this->query->where("user_id", $userId);
+        return $this;
+    }
 }
