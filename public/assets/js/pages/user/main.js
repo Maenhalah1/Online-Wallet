@@ -19,7 +19,7 @@ const loadCurrencies = async () => await Request.apiCall('/api/currency')
 const drawCurrencies = currencies => {
     let currencySelected = localStorage.getItem('currency_selected')
     currencySelected = currencySelected ? JSON.parse(currencySelected) : null
-    let htmlElement = `<select class="form-control" id="currencySelect">`;
+    let htmlElement = `<select class="form-control" id="currencySelect"><option value="0">Default</option>`;
     currencies.forEach((currency, index) => {
         htmlElement += `<option value="${currency.id}" ${currencySelected ? (currencySelected.id === currency.id ? "selected" : '') : ''}>${currency.code}</option>`
     })
@@ -37,11 +37,15 @@ loadCurrencies().then(response => {
 })
 
 $(document).on('change', '#currencySelect', async function () {
-    const response = await Request.apiCall(`/api/currency/${$(this).val()}`)
-    if (response.status_number === "S401") {
-        Cookies.removeCookie('user')
-        return location.href = '/login'
+    if($(this).val() == 0){
+        localStorage.clear();
+    }else{
+        const response = await Request.apiCall(`/api/currency/${$(this).val()}`)
+        if (response.status_number === "S401") {
+            Cookies.removeCookie('user')
+            return location.href = '/login'
+        }
+        localStorage.setItem('currency_selected', JSON.stringify(response.data))
     }
-    localStorage.setItem('currency_selected', JSON.stringify(response.data))
     location.reload()
 })
