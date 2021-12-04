@@ -57,11 +57,10 @@
                                     <td>{{$paymentMethod->id}}</td>
                                     <td>@if($paymentMethod->getFirstMedia('icon')) <img src="{{ $paymentMethod->getFirstMedia('icon')->url}}" alt="" width="50px">@endif</td>
                                     <td>{{$paymentMethod->name}}</td>
-                                    <td>{{$paymentMethod->name}}</td>
-
                                     <td>{{$paymentMethod->min_deposit}}</td>
                                     <td>{{$paymentMethod->max_deposit}}</td>
                                     <td>{{$paymentMethod->min_withdrawal}}</td>
+                                    <td>{{$paymentMethod->max_withdrawal}}</td>
                                     <td style="width: 120px">@foreach($paymentMethod->currencies as $currency) <span class="currency-code">{{$currency->code}}</span> @endforeach</td>
 
                                     <td>
