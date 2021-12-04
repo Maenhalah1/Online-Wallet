@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         User::factory(10)->afterCreating(function ($user){
-             $wallet = new Wallet();
-             $wallet->total_amount = 0;
-             $user->wallet()->save($wallet);
-         })->create();
+//         User::factory(10)->afterCreating(function ($user){
+//             $wallet = new Wallet();
+//             $wallet->total_amount = 0;
+//             $user->wallet()->save($wallet);
+//         })->create();
         $this->call(AdminSeeder::class);
     }
 }
