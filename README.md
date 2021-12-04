@@ -8,3 +8,9 @@
 - Run (php artisan passport:install).
 - Run (php artisan key:generate).
 - Run (php artisan db:seed).
+
+## Admin Control Panel
+- path -> /admin/login
+- username: admin
+- email: admin@admin.com
+- password: admin
