@@ -6,5 +6,5 @@
 - Add .env file.
 - Run (php artisan migrate).
 - Run (php artisan passport:install).
-- Run (php artisan generate:key).
+- Run (php artisan key:generate).
 - Run (php artisan db:seed).
