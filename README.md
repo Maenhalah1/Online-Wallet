@@ -2,7 +2,7 @@
 
 
 ## Run Project
-
+- Run (composer install)
 - Add .env file.
 - Run (php artisan migrate).
 - Run (php artisan passport:install).
